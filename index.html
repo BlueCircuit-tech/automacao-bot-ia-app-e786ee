@@ -481,6 +481,298 @@
   </script>
 </section>
 
+    <section data-tela="escolher-servico" class="hidden">
+  <style>
+    [data-tela="escolher-servico"] .es-card{border:1px solid #dbe7f5;background:#fff;border-radius:20px;overflow:hidden;transition:.2s}
+    [data-tela="escolher-servico"] .es-card.es-selected{border-color:#2563EB;box-shadow:0 0 0 2px rgba(37,99,235,.14)}
+    [data-tela="escolher-servico"] .es-chip{border:1px solid #dbe7f5;background:#fff;color:#1E3A5F}
+    [data-tela="escolher-servico"] .es-chip.es-active{border-color:#2563EB;background:#2563EB;color:#fff}
+    [data-tela="escolher-servico"] .es-field{width:100%;border:1px solid #dbe7f5;border-radius:14px;background:#fff;padding:12px 14px;color:#1E3A5F;outline:none}
+    [data-tela="escolher-servico"] .es-field:focus{border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+  </style>
+
+  <div class="mx-auto w-full max-w-[430px] bg-[#F8FAFC] px-4 pb-28 pt-5 text-[#1E3A5F]">
+    <div class="mb-5">
+      <button type="button" onclick="mostrarTela('inicio-premium')" class="mb-4 inline-flex items-center gap-2 rounded-full border border-[#dbe7f5] bg-white px-3 py-2 text-xs font-bold text-[#1E3A5F] shadow-sm">
+        <span aria-hidden="true">←</span>
+        Início Premium
+      </button>
+      <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#2563EB]">Proteção sob medida</p>
+      <h1 class="mt-1 font-serif text-3xl font-bold leading-tight text-[#1E3A5F]">Qual experiência você procura?</h1>
+      <p class="mt-2 text-sm leading-6 text-[#54708f]">Selecione o local e o serviço. Nossa equipe prepara o atendimento ideal para seu veículo ou condomínio.</p>
+    </div>
+
+    <div class="mb-5 rounded-[22px] border border-[#dbe7f5] bg-white p-2 shadow-sm">
+      <div class="grid grid-cols-2 gap-2" role="tablist" aria-label="Tipo de atendimento">
+        <button id="es-tipo-veiculo" type="button" onclick="escolher_servico_mudarTipo('veiculo')" class="es-chip es-active rounded-2xl px-3 py-3 text-sm font-bold">
+          🚘 Meu veículo
+        </button>
+        <button id="es-tipo-imovel" type="button" onclick="escolher_servico_mudarTipo('imovel')" class="es-chip rounded-2xl px-3 py-3 text-sm font-bold">
+          🏢 Condomínio
+        </button>
+      </div>
+    </div>
+
+    <div id="es-identificacao-veiculo" class="mb-6 rounded-[22px] bg-[#1E3A5F] p-4 text-white shadow-lg">
+      <div class="mb-3 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-wider text-[#bcd3f2]">Seu automóvel</p>
+          <h2 class="mt-1 font-serif text-xl font-bold">Identifique o veículo</h2>
+        </div>
+        <span class="rounded-full bg-white/10 px-3 py-1 text-xs font-bold">Premium</span>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <label class="text-xs font-semibold text-[#dbe7f5]">
+          Marca
+          <select id="es-marca" onchange="escolher_servico_atualizarModelos()" class="es-field mt-1 text-sm">
+            <option value="Porsche">Porsche</option>
+            <option value="BMW">BMW</option>
+            <option value="Mercedes-Benz">Mercedes-Benz</option>
+            <option value="Outro veículo">Outra marca</option>
+          </select>
+        </label>
+        <label class="text-xs font-semibold text-[#dbe7f5]">
+          Modelo
+          <select id="es-modelo" onchange="escolher_servico_atualizarResumo()" class="es-field mt-1 text-sm">
+            <option>Macan</option>
+            <option>Cayenne</option>
+            <option>911 Carrera</option>
+            <option>Panamera</option>
+          </select>
+        </label>
+      </div>
+      <label class="mt-3 block text-xs font-semibold text-[#dbe7f5]">
+        Ano
+        <select id="es-ano" onchange="escolher_servico_atualizarResumo()" class="es-field mt-1 text-sm">
+          <option>2025</option>
+          <option>2024</option>
+          <option>2023</option>
+          <option>2022</option>
+          <option>2021 ou anterior</option>
+        </select>
+      </label>
+    </div>
+
+    <div id="es-identificacao-imovel" class="mb-6 hidden rounded-[22px] bg-[#1E3A5F] p-4 text-white shadow-lg">
+      <div class="mb-3">
+        <p class="text-xs font-bold uppercase tracking-wider text-[#bcd3f2]">Atendimento residencial</p>
+        <h2 class="mt-1 font-serif text-xl font-bold">Dados do condomínio</h2>
+      </div>
+      <label class="block text-xs font-semibold text-[#dbe7f5]">
+        Nome do condomínio
+        <input id="es-condominio" type="text" value="Reserva do Parque" oninput="escolher_servico_atualizarResumo()" class="es-field mt-1 text-sm" placeholder="Ex.: Reserva do Parque">
+      </label>
+      <div class="mt-3 grid grid-cols-[1fr_88px] gap-2">
+        <label class="text-xs font-semibold text-[#dbe7f5]">
+          Bairro
+          <input id="es-bairro" type="text" value="Alphaville" oninput="escolher_servico_atualizarResumo()" class="es-field mt-1 text-sm" placeholder="Bairro">
+        </label>
+        <label class="text-xs font-semibold text-[#dbe7f5]">
+          Janelas
+          <select id="es-janelas" onchange="escolher_servico_atualizarResumo()" class="es-field mt-1 text-sm">
+            <option>4</option>
+            <option>6</option>
+            <option selected>8</option>
+            <option>10+</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="mb-3 flex items-end justify-between">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-wider text-[#2563EB]">Serviços selecionáveis</p>
+        <h2 class="font-serif text-2xl font-bold">Proteção premium</h2>
+      </div>
+      <span id="es-contagem" class="rounded-full bg-[#eaf2ff] px-3 py-1 text-xs font-bold text-[#2563EB]">3 opções</span>
+    </div>
+
+    <div id="es-lista-servicos" class="space-y-4">
+      <article data-categoria="veiculo" data-servico="PPF Performance" data-preco="A partir de R$ 4.900" onclick="escolher_servico_selecionar(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();escolher_servico_selecionar(this)}" role="button" tabindex="0" class="es-card es-selected cursor-pointer">
+        <div class="relative h-36 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&amp;auto=format&amp;fit=crop" alt="Porsche recebendo proteção de pintura PPF" class="h-full w-full object-cover">
+          <span class="absolute left-3 top-3 rounded-full bg-[#1E3A5F] px-3 py-1 text-xs font-bold text-white">Mais escolhido</span>
+          <span class="absolute bottom-3 right-3 rounded-full bg-white px-3 py-1 text-xs font-bold text-[#1E3A5F] shadow">4,9 ★</span>
+        </div>
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-serif text-xl font-bold">PPF Performance</h3>
+              <p class="mt-1 text-xs leading-5 text-[#54708f]">Filme transparente autorregenerativo para preservar a pintura original.</p>
+            </div>
+            <span class="es-check flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#2563EB] text-sm font-bold text-white">✓</span>
+          </div>
+          <div class="mt-3 flex flex-wrap gap-2 text-[11px] font-bold text-[#1E3A5F]">
+            <span class="rounded-full bg-[#edf4fc] px-2.5 py-1">Proteção contra pedras</span>
+            <span class="rounded-full bg-[#edf4fc] px-2.5 py-1">Até 10 anos</span>
+            <span class="rounded-full bg-[#edf4fc] px-2.5 py-1">Brilho preservado</span>
+          </div>
+          <div class="mt-4 flex items-center justify-between border-t border-[#e7eef7] pt-3">
+            <div>
+              <p class="text-[10px] uppercase tracking-wider text-[#7890aa]">Faixa estimada</p>
+              <p class="text-sm font-extrabold text-[#2563EB]">A partir de R$ 4.900</p>
+            </div>
+            <span class="text-xs font-bold text-[#2563EB]">Selecionado</span>
+          </div>
+        </div>
+      </article>
+
+      <article data-categoria="veiculo" data-servico="Película Nano Cerâmica" data-preco="De R$ 1.290 a R$ 2.490" onclick="escolher_servico_selecionar(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();escolher_servico_selecionar(this)}" role="button" tabindex="0" class="es-card cursor-pointer">
+        <div class="grid grid-cols-[112px_1fr]">
+          <img src="https://images.unsplash.com/photo-1555215695-3004980ad54e?w=500&amp;auto=format&amp;fit=crop" alt="BMW com película automotiva premium" class="h-full min-h-48 w-full object-cover">
+          <div class="p-4">
+            <div class="flex justify-between gap-2">
+              <h3 class="font-serif text-lg font-bold">Película Nano Cerâmica</h3>
+              <span class="es-check flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#c9d8e9] text-transparent">✓</span>
+            </div>
+            <p class="mt-2 text-xs leading-5 text-[#54708f]">Conforto térmico e proteção UV sem comprometer a visibilidade.</p>
+            <div class="mt-3 space-y-1 text-xs font-semibold">
+              <p>✓ Rejeição de até 95% do infravermelho</p>
+              <p>✓ Proteção UV superior a 99%</p>
+            </div>
+            <p class="mt-3 text-sm font-extrabold text-[#2563EB]">R$ 1.290 a R$ 2.490</p>
+          </div>
+        </div>
+      </article>
+
+      <article data-categoria="imovel" data-servico="Película Arquitetônica Premium" data-preco="A partir de R$ 180/m²" onclick="escolher_servico_selecionar(this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();escolher_servico_selecionar(this)}" role="button" tabindex="0" class="es-card hidden cursor-pointer">
+        <div class="relative h-36 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=900&amp;auto=format&amp;fit=crop" alt="Fachada envidraçada de condomínio de alto padrão" class="h-full w-full object-cover">
+          <span class="absolute left-3 top-3 rounded-full bg-[#1E3A5F] px-3 py-1 text-xs font-bold text-white">Atendimento no local</span>
+        </div>
+        <div class="p-4">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="font-serif text-xl font-bold">Película Arquitetônica Premium</h3>
+              <p class="mt-1 text-xs leading-5 text-[#54708f]">Controle solar, privacidade e conforto para apartamentos e áreas comuns.</p>
+            </div>
+            <span class="es-check flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#c9d8e9] text-transparent">✓</span>
+          </div>
+          <div class="mt-3 grid grid-cols-2 gap-2 text-xs font-semibold">
+            <span class="rounded-xl bg-[#edf4fc] p-2">Menos calor interno</span>
+            <span class="rounded-xl bg-[#edf4fc] p-2">Aplicação limpa</span>
+          </div>
+          <p class="mt-3 text-sm font-extrabold text-[#2563EB]">A partir de R$ 180/m²</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="mt-5 rounded-[22px] border border-[#cfe0f3] bg-[#edf4fc] p-4">
+      <div class="flex gap-3">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-xl">🛡️</div>
+        <div>
+          <p class="text-sm font-bold">Instalação especializada</p>
+          <p class="mt-1 text-xs leading-5 text-[#54708f]">Aplicadores treinados, materiais certificados e garantia digital vinculada ao pedido.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-5 rounded-[22px] bg-white p-4 shadow-sm ring-1 ring-[#dbe7f5]">
+      <p class="text-xs font-bold uppercase tracking-wider text-[#7890aa]">Sua escolha</p>
+      <div class="mt-2 flex items-start justify-between gap-3">
+        <div>
+          <h3 id="es-resumo-servico" class="font-serif text-lg font-bold">PPF Performance</h3>
+          <p id="es-resumo-alvo" class="mt-1 text-xs text-[#54708f]">Porsche Macan • 2025</p>
+        </div>
+        <p id="es-resumo-preco" class="max-w-[130px] text-right text-xs font-extrabold text-[#2563EB]">A partir de R$ 4.900</p>
+      </div>
+    </div>
+
+    <div class="mt-5 grid grid-cols-[1fr_auto] gap-2">
+      <button type="button" onclick="mostrarTela('agendar-atendimento')" class="rounded-2xl bg-[#2563EB] px-5 py-4 text-sm font-extrabold text-white shadow-lg shadow-blue-900/10 active:scale-[.98]">
+        Personalizar e agendar
+      </button>
+      <button type="button" onclick="mostrarTela('orcamento-e-pagamento')" aria-label="Ir para orçamento e pagamento" class="flex h-[52px] w-[52px] items-center justify-center rounded-2xl border border-[#c9d8e9] bg-white text-xl text-[#1E3A5F] shadow-sm active:scale-[.98]">
+        R$
+      </button>
+    </div>
+    <p class="mt-3 text-center text-[11px] leading-4 text-[#7890aa]">O valor final é confirmado após análise técnica. Você não paga nada nesta etapa.</p>
+  </div>
+
+  <script>
+    function escolher_servico_mudarTipo(tipo) {
+      var veiculo = tipo === 'veiculo';
+      document.getElementById('es-tipo-veiculo').classList.toggle('es-active', veiculo);
+      document.getElementById('es-tipo-imovel').classList.toggle('es-active', !veiculo);
+      document.getElementById('es-identificacao-veiculo').classList.toggle('hidden', !veiculo);
+      document.getElementById('es-identificacao-imovel').classList.toggle('hidden', veiculo);
+
+      var cards = document.querySelectorAll('#es-lista-servicos [data-categoria]');
+      var primeiro = null;
+      var total = 0;
+      cards.forEach(function(card) {
+        var mostrar = card.dataset.categoria === tipo;
+        card.classList.toggle('hidden', !mostrar);
+        if (mostrar) {
+          total++;
+          if (!primeiro) primeiro = card;
+        }
+      });
+      document.getElementById('es-contagem').textContent = total + (total === 1 ? ' opção' : ' opções');
+      if (primeiro) escolher_servico_selecionar(primeiro);
+    }
+
+    function escolher_servico_selecionar(card) {
+      document.querySelectorAll('#es-lista-servicos .es-card').forEach(function(item) {
+        item.classList.remove('es-selected');
+        var check = item.querySelector('.es-check');
+        check.classList.remove('bg-[#2563EB]', 'text-white');
+        check.classList.add('border', 'border-[#c9d8e9]', 'text-transparent');
+        var status = item.querySelector('.es-check') && item.querySelector('.es-check').parentElement.parentElement.querySelector('.text-xs.font-bold.text-\\[\\#2563EB\\]');
+        if (status && status.textContent.trim() === 'Selecionado') status.textContent = 'Toque para escolher';
+      });
+      card.classList.add('es-selected');
+      var check = card.querySelector('.es-check');
+      check.classList.remove('border', 'border-[#c9d8e9]', 'text-transparent');
+      check.classList.add('bg-[#2563EB]', 'text-white');
+      var status = card.querySelector('.es-check') && card.querySelector('.es-check').parentElement.parentElement.querySelector('.text-xs.font-bold.text-\\[\\#2563EB\\]');
+      if (status) status.textContent = 'Selecionado';
+      document.getElementById('es-resumo-servico').textContent = card.dataset.servico;
+      document.getElementById('es-resumo-preco').textContent = card.dataset.preco;
+      escolher_servico_atualizarResumo();
+      window.escolherServicoSelecionado = {
+        servico: card.dataset.servico,
+        preco: card.dataset.preco,
+        categoria: card.dataset.categoria
+      };
+    }
+
+    function escolher_servico_atualizarModelos() {
+      var marca = document.getElementById('es-marca').value;
+      var modelos = {
+        'Porsche': ['Macan', 'Cayenne', '911 Carrera', 'Panamera'],
+        'BMW': ['X1', 'X3', 'X5', 'Série 3'],
+        'Mercedes-Benz': ['GLA 200', 'GLC 300', 'C 300', 'GLE 450'],
+        'Outro veículo': ['SUV', 'Sedã', 'Cupê', 'Esportivo']
+      };
+      var select = document.getElementById('es-modelo');
+      select.innerHTML = '';
+      modelos[marca].forEach(function(modelo) {
+        var option = document.createElement('option');
+        option.textContent = modelo;
+        select.appendChild(option);
+      });
+      escolher_servico_atualizarResumo();
+    }
+
+    function escolher_servico_atualizarResumo() {
+      var imovelAtivo = document.getElementById('es-tipo-imovel').classList.contains('es-active');
+      var texto;
+      if (imovelAtivo) {
+        var nome = document.getElementById('es-condominio').value.trim() || 'Condomínio a definir';
+        var bairro = document.getElementById('es-bairro').value.trim() || 'bairro a definir';
+        var janelas = document.getElementById('es-janelas').value;
+        texto = nome + ' • ' + bairro + ' • ' + janelas + ' janelas';
+      } else {
+        texto = document.getElementById('es-marca').value + ' ' +
+          document.getElementById('es-modelo').value + ' • ' +
+          document.getElementById('es-ano').value;
+      }
+      document.getElementById('es-resumo-alvo').textContent = texto;
+    }
+  </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
