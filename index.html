@@ -1817,6 +1817,419 @@
   </script>
 </section>
 
+    <section data-tela="painel-administrativo" class="hidden">
+  <style>
+    .pa-card{background:#fff;border-radius:12px;padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(30,58,95,.08)}
+    .pa-stat{text-align:center;padding:8px 4px}
+    .pa-stat-num{font-size:1.4rem;font-weight:700;color:#1E3A5F}
+    .pa-stat-lbl{font-size:.7rem;color:#6B7280;margin-top:2px;text-transform:uppercase;letter-spacing:.03em}
+    .pa-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:600}
+    .pa-badge-ok{background:#D1FAE5;color:#065F46}
+    .pa-badge-wait{background:#FEF3C7;color:#92400E}
+    .pa-badge-pend{background:#DBEAFE;color:#1E40AF}
+    .pa-badge-cancel{background:#FEE2E2;color:#991B1B}
+    .pa-list-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F1F5F9;cursor:pointer}
+    .pa-list-item:last-child{border-bottom:none}
+    .pa-avatar{width:38px;height:38px;border-radius:50%;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;flex-shrink:0}
+    .pa-tab{flex:1;text-align:center;padding:8px 0;font-size:.75rem;font-weight:600;color:#6B7280;cursor:pointer;border-bottom:2px solid transparent;transition:.2s}
+    .pa-tab.ativo{color:#2563EB;border-bottom-color:#2563EB}
+    .pa-btn{padding:8px 14px;border-radius:8px;font-size:.75rem;font-weight:600;cursor:pointer;border:none;transition:.2s}
+    .pa-btn-primary{background:#2563EB;color:#fff}
+    .pa-btn-sm{padding:5px 10px;font-size:.68rem;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+    .pa-input{padding:8px 12px;border:1px solid #E2E8F0;border-radius:8px;font-size:.8rem;width:100%;box-sizing:border-box;background:#fff}
+    .pa-modal-bg{position:fixed;inset:0;background:rgba(30,58,95,.5);z-index:60;display:none;align-items:flex-end;justify-content:center}
+    .pa-modal-bg.ativo{display:flex}
+    .pa-modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:20px}
+    .pa-swipe-hint{width:36px;height:4px;background:#D1D5DB;border-radius:2px;margin:0 auto 14px}
+  </style>
+
+  <!-- Stats -->
+  <div class="pa-card" style="padding:12px 8px">
+    <div class="flex" style="gap:4px">
+      <div class="pa-stat flex-1"><div class="pa-stat-num">12</div><div class="pa-stat-lbl">Clientes</div></div>
+      <div class="pa-stat flex-1"><div class="pa-stat-num">8</div><div class="pa-stat-lbl">Pedidos</div></div>
+      <div class="pa-stat flex-1"><div class="pa-stat-num">5</div><div class="pa-stat-lbl">Agend.</div></div>
+      <div class="pa-stat flex-1"><div class="pa-stat-num">R$18.4k</div><div class="pa-stat-lbl">Receita</div></div>
+    </div>
+  </div>
+
+  <!-- Filtro rápido -->
+  <div class="flex gap-2 mb-3">
+    <select id="pa-filtro-status" class="pa-input" style="width:auto;flex:1" onchange="painel_administrativo_filtrar()">
+      <option value="">Todos status</option><option value="aprovado">Aprovado</option><option value="pendente">Pendente</option><option value="cancelado">Cancelado</option>
+    </select>
+    <select id="pa-filtro-tipo" class="pa-input" style="width:auto;flex:1" onchange="painel_administrativo_filtrar()">
+      <option value="">Todos tipos</option><option value="ppf">PPF</option><option value="insulfilm">Insulfilm</option><option value="ceramica">Cerâmica</option>
+    </select>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex mb-2" style="border-bottom:1px solid #E2E8F0">
+    <div class="pa-tab ativo" onclick="painel_administrativo_tab(this,'tab-orcamentos')">Orçamentos</div>
+    <div class="pa-tab" onclick="painel_administrativo_tab(this,'tab-agenda')">Agenda</div>
+    <div class="pa-tab" onclick="painel_administrativo_tab(this,'tab-clientes')">Clientes</div>
+    <div class="pa-tab" onclick="painel_administrativo_tab(this,'tab-pagamentos')">Pagtos</div>
+  </div>
+
+  <!-- TAB: Orçamentos -->
+  <div id="tab-orcamentos" class="pa-tab-content">
+    <div id="pa-lista-orcamentos">
+      <div class="pa-list-item" onclick="painel_administrativo_detalheOrc(0)">
+        <div class="pa-avatar">RM</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Ricardo Mendes</span><span class="pa-badge pa-badge-wait">Pendente</span></div>
+          <div class="text-xs text-gray-500 truncate">PPF frontal + capô — BMW X5</div>
+          <div class="text-xs font-semibold" style="color:#2563EB">R$ 4.800,00</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheOrc(1)">
+        <div class="pa-avatar">AF</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Ana Furtado</span><span class="pa-badge pa-badge-pend">Aguardando</span></div>
+          <div class="text-xs text-gray-500 truncate">Insulfilm 70% — Porsche Cayenne</div>
+          <div class="text-xs font-semibold" style="color:#2563EB">R$ 1.200,00</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheOrc(2)">
+        <div class="pa-avatar">CL</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Carlos Leite</span><span class="pa-badge pa-badge-ok">Aprovado</span></div>
+          <div class="text-xs text-gray-500 truncate">PPF completo — BMW M4</div>
+          <div class="text-xs font-semibold" style="color:#2563EB">R$ 12.500,00</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheOrc(3)">
+        <div class="pa-avatar">MS</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Marina Souza</span><span class="pa-badge pa-badge-ok">Aprovado</span></div>
+          <div class="text-xs text-gray-500 truncate">Insulfilm 35% + PPF para-choque — Porsche 911</div>
+          <div class="text-xs font-semibold" style="color:#2563EB">R$ 6.200,00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Agenda -->
+  <div id="tab-agenda" class="pa-tab-content hidden">
+    <div id="pa-lista-agenda">
+      <div class="pa-list-item" onclick="painel_administrativo_detalheAgenda(0)">
+        <div class="pa-avatar" style="background:#059669">📅</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Hoje — 14:00</span><span class="pa-badge pa-badge-ok">Confirmado</span></div>
+          <div class="text-xs text-gray-500 truncate">Ricardo Mendes · BMW X5 · PPF frontal</div>
+          <div class="text-xs text-gray-400">Cond. Parque das Nações, Bloco C</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheAgenda(1)">
+        <div class="pa-avatar" style="background:#D97706">📅</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Hoje — 16:30</span><span class="pa-badge pa-badge-wait">Aguardando</span></div>
+          <div class="text-xs text-gray-500 truncate">Ana Furtado · Porsche Cayenne · Insulfilm</div>
+          <div class="text-xs text-gray-400">Cond. Jardim Europa, Bloco A</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheAgenda(2)">
+        <div class="pa-avatar" style="background:#059669">📅</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Amanhã — 09:00</span><span class="pa-badge pa-badge-pend">Pendente</span></div>
+          <div class="text-xs text-gray-500 truncate">Carlos Leite · BMW M4 · PPF completo</div>
+          <div class="text-xs text-gray-400">Cond. Alphaville, Bloco D</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Clientes -->
+  <div id="tab-clientes" class="pa-tab-content hidden">
+    <div id="pa-lista-clientes">
+      <div class="pa-list-item" onclick="painel_administrativo_detalheCli(0)">
+        <div class="pa-avatar">RM</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm" style="color:#1E3A5F">Ricardo Mendes</div>
+          <div class="text-xs text-gray-500">(11) 98765-4321</div>
+          <div class="text-xs text-gray-400">Cond. Parque das Nações</div>
+        </div>
+        <span class="pa-badge pa-badge-ok">VIP</span>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheCli(1)">
+        <div class="pa-avatar">AF</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm" style="color:#1E3A5F">Ana Furtado</div>
+          <div class="text-xs text-gray-500">(11) 91234-5678</div>
+          <div class="text-xs text-gray-400">Cond. Jardim Europa</div>
+        </div>
+        <span class="pa-badge pa-badge-pend">Novo</span>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheCli(2)">
+        <div class="pa-avatar">CL</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm" style="color:#1E3A5F">Carlos Leite</div>
+          <div class="text-xs text-gray-500">(11) 99876-5432</div>
+          <div class="text-xs text-gray-400">Cond. Alphaville</div>
+        </div>
+        <span class="pa-badge pa-badge-ok">VIP</span>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalheCli(3)">
+        <div class="pa-avatar">MS</div>
+        <div class="flex-1 min-w-0">
+          <div class="font-semibold text-sm" style="color:#1E3A5F">Marina Souza</div>
+          <div class="text-xs text-gray-500">(11) 97654-3210</div>
+          <div class="text-xs text-gray-400">Cond. Morumbi Prime</div>
+        </div>
+        <span class="pa-badge pa-badge-ok">VIP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: Pagamentos -->
+  <div id="tab-pagamentos" class="pa-tab-content hidden">
+    <div id="pa-lista-pagamentos">
+      <div class="pa-list-item" onclick="painel_administrativo_detalhePag(0)">
+        <div class="pa-avatar" style="background:#059669">R$</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Ricardo Mendes</span><span class="pa-badge pa-badge-ok">Pago</span></div>
+          <div class="text-xs text-gray-500">PPF frontal BMW X5</div>
+          <div class="text-xs font-semibold" style="color:#059669">R$ 4.800,00 · 15/03/2026</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalhePag(1)">
+        <div class="pa-avatar" style="background:#D97706">R$</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Ana Furtado</span><span class="pa-badge pa-badge-wait">Pendente</span></div>
+          <div class="text-xs text-gray-500">Insulfilm Porsche Cayenne</div>
+          <div class="text-xs font-semibold" style="color:#D97706">R$ 1.200,00 · venc. 20/03</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalhePag(2)">
+        <div class="pa-avatar" style="background:#059669">R$</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Carlos Leite</span><span class="pa-badge pa-badge-pend">2x pendente</span></div>
+          <div class="text-xs text-gray-500">PPF completo BMW M4</div>
+          <div class="text-xs font-semibold" style="color:#2563EB">R$ 12.500,00 · 1ª parcela paga</div>
+        </div>
+      </div>
+      <div class="pa-list-item" onclick="painel_administrativo_detalhePag(3)">
+        <div class="pa-avatar" style="background:#059669">R$</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">Marina Souza</span><span class="pa-badge pa-badge-ok">Pago</span></div>
+          <div class="text-xs text-gray-500">Insulfilm + PPF Porsche 911</div>
+          <div class="text-xs font-semibold" style="color:#059669">R$ 6.200,00 · 18/03/2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ações rápidas -->
+  <div class="pa-card">
+    <div class="text-xs font-semibold uppercase tracking-wide mb-2" style="color:#6B7280">Ações rápidas</div>
+    <div class="flex gap-2 flex-wrap">
+      <button class="pa-btn pa-btn-primary" onclick="mostrarTela('escolher-servico')">+ Novo Orçamento</button>
+      <button class="pa-btn" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_enviarNotificacao()">📢 Notificar</button>
+      <button class="pa-btn" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_exportar()">📊 Exportar</button>
+    </div>
+  </div>
+
+  <!-- Modal: Detalhe Orçamento -->
+  <div id="pa-modal-orc" class="pa-modal-bg" onclick="if(event.target===this)painel_administrativo_fecharModal('pa-modal-orc')">
+    <div class="pa-modal">
+      <div class="pa-swipe-hint"></div>
+      <div id="pa-modal-orc-conteudo"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalhe Agenda -->
+  <div id="pa-modal-agenda" class="pa-modal-bg" onclick="if(event.target===this)painel_administrativo_fecharModal('pa-modal-agenda')">
+    <div class="pa-modal">
+      <div class="pa-swipe-hint"></div>
+      <div id="pa-modal-agenda-conteudo"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalhe Cliente -->
+  <div id="pa-modal-cli" class="pa-modal-bg" onclick="if(event.target===this)painel_administrativo_fecharModal('pa-modal-cli')">
+    <div class="pa-modal">
+      <div class="pa-swipe-hint"></div>
+      <div id="pa-modal-cli-conteudo"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Detalhe Pagamento -->
+  <div id="pa-modal-pag" class="pa-modal-bg" onclick="if(event.target===this)painel_administrativo_fecharModal('pa-modal-pag')">
+    <div class="pa-modal">
+      <div class="pa-swipe-hint"></div>
+      <div id="pa-modal-pag-conteudo"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Notificação -->
+  <div id="pa-modal-notif" class="pa-modal-bg" onclick="if(event.target===this)painel_administrativo_fecharModal('pa-modal-notif')">
+    <div class="pa-modal">
+      <div class="pa-swipe-hint"></div>
+      <div class="font-bold text-base mb-3" style="color:#1E3A5F">Enviar notificação</div>
+      <div class="mb-3">
+        <label class="text-xs font-semibold text-gray-600 block mb-1">Destinatário</label>
+        <select id="pa-notif-dest" class="pa-input">
+          <option value="todos">Todos os clientes</option><option value="vip">Somente VIP</option><option value="pendente">Com orçamento pendente</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="text-xs font-semibold text-gray-600 block mb-1">Canal</label>
+        <div class="flex gap-2">
+          <label class="flex items-center gap-1 text-sm"><input type="checkbox" checked> WhatsApp</label>
+          <label class="flex items-center gap-1 text-sm"><input type="checkbox" checked> Push</label>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="text-xs font-semibold text-gray-600 block mb-1">Mensagem</label>
+        <textarea id="pa-notif-msg" class="pa-input" rows="3" placeholder="Olá! Temos novidades..."></textarea>
+      </div>
+      <button class="pa-btn pa-btn-primary w-full" onclick="painel_administrativo_enviarNotifConfirm()">Enviar notificação</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div id="pa-toast" class="fixed bottom-16 left-1/2 -translate-x-1/2 px-4 py-2 rounded-lg text-white text-sm font-semibold opacity-0 transition-opacity duration-300 pointer-events-none" style="background:#059669;z-index:70;max-width:380px;text-align:center"></div>
+
+  <script>
+    const pa_orcamentos = [
+      {nome:'Ricardo Mendes',ini:'RM',tel:'(11) 98765-4321',carro:'BMW X5',serv:'PPF frontal + capô',valor:4800,status:'Pendente',badge:'pa-badge-wait',cond:'Cond. Parque das Nações'},
+      {nome:'Ana Furtado',ini:'AF',tel:'(11) 91234-5678',carro:'Porsche Cayenne',serv:'Insulfilm 70%',valor:1200,status:'Aguardando',badge:'pa-badge-pend',cond:'Cond. Jardim Europa'},
+      {nome:'Carlos Leite',ini:'CL',tel:'(11) 99876-5432',carro:'BMW M4',serv:'PPF completo',valor:12500,status:'Aprovado',badge:'pa-badge-ok',cond:'Cond. Alphaville'},
+      {nome:'Marina Souza',ini:'MS',tel:'(11) 97654-3210',carro:'Porsche 911',serv:'Insulfilm 35% + PPF para-choque',valor:6200,status:'Aprovado',badge:'pa-badge-ok',cond:'Cond. Morumbi Prime'}
+    ];
+    const pa_agenda = [
+      {nome:'Ricardo Mendes',ini:'RM',carro:'BMW X5',serv:'PPF frontal',data:'Hoje',hora:'14:00',status:'Confirmado',badge:'pa-badge-ok',cond:'Cond. Parque das Nações, Bloco C'},
+      {nome:'Ana Furtado',ini:'AF',carro:'Porsche Cayenne',serv:'Insulfilm 70%',data:'Hoje',hora:'16:30',status:'Aguardando',badge:'pa-badge-wait',cond:'Cond. Jardim Europa, Bloco A'},
+      {nome:'Carlos Leite',ini:'CL',carro:'BMW M4',serv:'PPF completo',data:'Amanhã',hora:'09:00',status:'Pendente',badge:'pa-badge-pend',cond:'Cond. Alphaville, Bloco D'}
+    ];
+    const pa_clientes = [
+      {nome:'Ricardo Mendes',ini:'RM',tel:'(11) 98765-4321',email:'ricardo.m@email.com',cond:'Cond. Parque das Nações',vip:true,pedidos:5},
+      {nome:'Ana Furtado',ini:'AF',tel:'(11) 91234-5678',email:'ana.f@email.com',cond:'Cond. Jardim Europa',vip:false,pedidos:1},
+      {nome:'Carlos Leite',ini:'CL',tel:'(11) 99876-5432',email:'carlos.l@email.com',cond:'Cond. Alphaville',vip:true,pedidos:8},
+      {nome:'Marina Souza',ini:'MS',tel:'(11) 97654-3210',email:'marina.s@email.com',cond:'Cond. Morumbi Prime',vip:true,pedidos:3}
+    ];
+    const pa_pagamentos = [
+      {nome:'Ricardo Mendes',ini:'RM',serv:'PPF frontal BMW X5',valor:4800,status:'Pago',badge:'pa-badge-ok',data:'15/03/2026',parcelas:'1x'},
+      {nome:'Ana Furtado',ini:'AF',serv:'Insulfilm Porsche Cayenne',valor:1200,status:'Pendente',badge:'pa-badge-wait',data:'venc. 20/03',parcelas:'1x'},
+      {nome:'Carlos Leite',ini:'CL',serv:'PPF completo BMW M4',valor:12500,status:'Pendente',badge:'pa-badge-pend',data:'2x pendente',parcelas:'2x'},
+      {nome:'Marina Souza',ini:'MS',serv:'Insulfilm + PPF Porsche 911',valor:6200,status:'Pago',badge:'pa-badge-ok',data:'18/03/2026',parcelas:'1x'}
+    ];
+
+    function painel_administrativo_tab(el, tabId) {
+      document.querySelectorAll('.pa-tab').forEach(t => t.classList.remove('ativo'));
+      el.classList.add('ativo');
+      document.querySelectorAll('.pa-tab-content').forEach(c => c.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+    }
+
+    function painel_administrativo_filtrar() {
+      const sf = document.getElementById('pa-filtro-status').value;
+      const tf = document.getElementById('pa-filtro-tipo').value;
+      const mapStatus = {'aprovado':'Aprovado','pendente':'Pendente','cancelado':'Cancelado'};
+      const statusFiltro = mapStatus[sf];
+      const tipoMap = {'ppf':'PPF','insulfilm':'Insulfilm','ceramica':'Cerâmica'};
+      const tipoFiltro = tipoMap[tf];
+      document.querySelectorAll('#pa-lista-orcamentos .pa-list-item').forEach(item => {
+        const txt = item.textContent.toLowerCase();
+        const okS = !statusFiltro || txt.includes(statusFiltro.toLowerCase());
+        const okT = !tipoFiltro || txt.includes(tipoFiltro.toLowerCase());
+        item.style.display = (okS && okT) ? '' : 'none';
+      });
+    }
+
+    function painel_administrativo_detalheOrc(i) {
+      const o = pa_orcamentos[i];
+      const acoes = o.status==='Aprovado'
+        ? '<button class="pa-btn pa-btn-primary w-full" onclick="painel_administrativo_confirmarAgend('+i+')">Confirmar agendamento</button>'
+        : o.status==='Pendente'
+        ? '<div class="flex gap-2"><button class="pa-btn pa-btn-primary flex-1" onclick="painel_administrativo_aprovarOrc('+i+')">Aprovar</button><button class="pa-btn flex-1" style="background:#FEE2E2;color:#991B1B" onclick="painel_administrativo_recusarOrc('+i+')">Recusar</button></div>'
+        : '<button class="pa-btn pa-btn-primary w-full" onclick="painel_administrativo_aprovarOrc('+i+')">Aprovar orçamento</button>';
+      document.getElementById('pa-modal-orc-conteudo').innerHTML = `
+        <div class="flex items-center gap-3 mb-4"><div class="pa-avatar">${o.ini}</div><div><div class="font-bold text-base" style="color:#1E3A5F">${o.nome}</div><div class="text-xs text-gray-500">${o.tel}</div></div></div>
+        <div class="pa-card" style="margin:0 0 12px;padding:12px"><div class="text-xs text-gray-500 mb-1">Veículo</div><div class="font-semibold text-sm" style="color:#1E3A5F">${o.carro}</div><div class="text-xs text-gray-500 mt-2 mb-1">Serviço</div><div class="text-sm">${o.serv}</div><div class="text-xs text-gray-500 mt-2 mb-1">Condomínio</div><div class="text-sm">${o.cond}</div><div class="flex justify-between items-center mt-3 pt-2" style="border-top:1px solid #F1F5F9"><span class="text-xs text-gray-500">Valor</span><span class="font-bold text-lg" style="color:#2563EB">R$ ${o.valor.toLocaleString('pt-BR')},00</span></div></div>
+        <div class="flex items-center justify-between mb-3"><span>Status</span><span class="pa-badge ${o.badge}">${o.status}</span></div>
+        <div class="mb-3"><label class="text-xs font-semibold text-gray-600 block mb-1">Responder ao cliente</label><textarea id="pa-orc-resp" class="pa-input" rows="2" placeholder="Escreva sua resposta..."></textarea></div>
+        ${acoes}
+        <button class="pa-btn w-full mt-2" style="background:#F1F5F9;color:#1E3A5F" onclick="mostrarTela('suporte-inteligente')">Abrir chat com cliente</button>`;
+      document.getElementById('pa-modal-orc').classList.add('ativo');
+    }
+
+    function painel_administrativo_detalheAgenda(i) {
+      const a = pa_agenda[i];
+      document.getElementById('pa-modal-agenda-conteudo').innerHTML = `
+        <div class="flex items-center gap-3 mb-4"><div class="pa-avatar" style="background:#059669">📅</div><div><div class="font-bold text-base" style="color:#1E3A5F">${a.data} às ${a.hora}</div><div class="text-xs text-gray-500">${a.cond}</div></div></div>
+        <div class="pa-card" style="margin:0 0 12px;padding:12px"><div class="flex items-center gap-3 mb-2"><div class="pa-avatar">${a.ini}</div><div class="font-semibold text-sm" style="color:#1E3A5F">${a.nome}</div></div><div class="text-sm text-gray-600">${a.carro} · ${a.serv}</div><div class="flex items-center justify-between mt-3 pt-2" style="border-top:1px solid #F1F5F9"><span>Status</span><span class="pa-badge ${a.badge}">${a.status}</span></div></div>
+        <div class="flex gap-2">
+          ${a.status==='Pendente'?'<button class="pa-btn pa-btn-primary flex-1" onclick="painel_administrativo_confirmarAgend('+i+')">Confirmar</button>':''}
+          <button class="pa-btn flex-1" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_reagendar()">Reagendar</button>
+          <button class="pa-btn flex-1" style="background:#FEE2E2;color:#991B1B" onclick="painel_administrativo_cancelarAgend()">Cancelar</button>
+        </div>`;
+      document.getElementById('pa-modal-agenda').classList.add('ativo');
+    }
+
+    function painel_administrativo_detalheCli(i) {
+      const c = pa_clientes[i];
+      document.getElementById('pa-modal-cli-conteudo').innerHTML = `
+        <div class="flex items-center gap-3 mb-4"><div class="pa-avatar">${c.ini}</div><div><div class="font-bold text-base" style="color:#1E3A5F">${c.nome}</div>${c.vip?'<span class="pa-badge pa-badge-ok">VIP</span>':'<span class="pa-badge pa-badge-pend">Novo</span>'}</div></div>
+        <div class="pa-card" style="margin:0 0 12px;padding:12px">
+          <div class="text-sm mb-2"><span class="text-gray-500">📱 </span>${c.tel}</div>
+          <div class="text-sm mb-2"><span class="text-gray-500">📧 </span>${c.email}</div>
+          <div class="text-sm mb-2"><span class="text-gray-500">🏢 </span>${c.cond}</div>
+          <div class="text-sm"><span class="text-gray-500">📋 </span>${c.pedidos} pedidos realizados</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="pa-btn pa-btn-primary flex-1" onclick="painel_administrativo_abrirChatCli('${c.nome}')">💬 Chat</button>
+          <button class="pa-btn flex-1" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_novoOrcCli('${c.nome}')">+ Orçamento</button>
+          <button class="pa-btn flex-1" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_enviarPushCli('${c.nome}')">📢 Push</button>
+        </div>`;
+      document.getElementById('pa-modal-cli').classList.add('ativo');
+    }
+
+    function painel_administrativo_detalhePag(i) {
+      const p = pa_pagamentos[i];
+      document.getElementById('pa-modal-pag-conteudo').innerHTML = `
+        <div class="flex items-center gap-3 mb-4"><div class="pa-avatar" style="background:#059669">R$</div><div><div class="font-bold text-base" style="color:#1E3A5F">${p.nome}</div><div class="text-xs text-gray-500">${p.serv}</div></div></div>
+        <div class="pa-card" style="margin:0 0 12px;padding:12px">
+          <div class="flex justify-between items-center mb-2"><span class="text-sm text-gray-500">Valor total</span><span class="font-bold text-xl" style="color:#2563EB">R$ ${p.valor.toLocaleString('pt-BR')},00</span></div>
+          <div class="flex justify-between items-center mb-2"><span class="text-sm text-gray-500">Parcelas</span><span class="text-sm font-semibold">${p.parcelas}</span></div>
+          <div class="flex justify-between items-center mb-2"><span class="text-sm text-gray-500">Data</span><span class="text-sm">${p.data}</span></div>
+          <div class="flex justify-between items-center pt-2" style="border-top:1px solid #F1F5F9"><span class="text-sm text-gray-500">Status</span><span class="pa-badge ${p.badge}">${p.status}</span></div>
+        </div>
+        ${p.status==='Pendente'?'<button class="pa-btn pa-btn-primary w-full mb-2" onclick="painel_administrativo_confirmarPag('+i+')">Confirmar recebimento</button><button class="pa-btn w-full" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_enviarCobranca('+i+')">📩 Enviar cobrança</button>':'<button class="pa-btn w-full" style="background:#F1F5F9;color:#1E3A5F" onclick="painel_administrativo_verRecibo('+i+')">🧾 Ver recibo</button>'}`;
+      document.getElementById('pa-modal-pag').classList.add('ativo');
+    }
+
+    function painel_administrativo_fecharModal(id) { document.getElementById(id).classList.remove('ativo'); }
+    function painel_administrativo_aprovarOrc(i) { pa_orcamentos[i].status='Aprovado'; pa_orcamentos[i].badge='pa-badge-ok'; painel_administrativo_fecharModal('pa-modal-orc'); painel_administrativo_renderOrcamentos(); painel_administrativo_toast('Orçamento aprovado!'); }
+    function painel_administrativo_recusarOrc(i) { pa_orcamentos[i].status='Recusado'; pa_orcamentos[i].badge='pa-badge-cancel'; painel_administrativo_fecharModal('pa-modal-orc'); painel_administrativo_renderOrcamentos(); painel_administrativo_toast('Orçamento recusado.', true); }
+    function painel_administrativo_confirmarAgend(i) { painel_administrativo_fecharModal('pa-modal-orc'); painel_administrativo_fecharModal('pa-modal-agenda'); painel_administrativo_toast('Agendamento confirmado! Cliente notificado.'); }
+    function painel_administrativo_cancelarAgend() { painel_administrativo_fecharModal('pa-modal-agenda'); painel_administrativo_toast('Agendamento cancelado.', true); }
+    function painel_administrativo_reagendar() { painel_administrativo_fecharModal('pa-modal-agenda'); painel_administrativo_toast('Link de reagendamento enviado ao cliente.'); }
+    function painel_administrativo_confirmarPag(i) { pa_pagamentos[i].status='Pago'; pa_pagamentos[i].badge='pa-badge-ok'; painel_administrativo_fecharModal('pa-modal-pag'); painel_administrativo_renderPagamentos(); painel_administrativo_toast('Pagamento confirmado!'); }
+    function painel_administrativo_enviarCobranca(i) { painel_administrativo_fecharModal('pa-modal-pag'); painel_administrativo_toast('Cobrança enviada por WhatsApp!'); }
+    function painel_administrativo_verRecibo(i) { painel_administrativo_fecharModal('pa-modal-pag'); painel_administrativo_toast('Recibo gerado e enviado.'); }
+    function painel_administrativo_abrirChatCli(n) { painel_administrativo_fecharModal('pa-modal-cli'); mostrarTela('suporte-inteligente'); }
+    function painel_administrativo_novoOrcCli(n) { painel_administrativo_fecharModal('pa-modal-cli'); mostrarTela('escolher-servico'); }
+    function painel_administrativo_enviarPushCli(n) { painel_administrativo_fecharModal('pa-modal-cli'); painel_administrativo_toast('Push enviado para ' + n + '!'); }
+    function painel_administrativo_enviarNotificacao() { document.getElementById('pa-modal-notif').classList.add('ativo'); }
+    function painel_administrativo_enviarNotifConfirm() { const msg = document.getElementById('pa-notif-msg').value; painel_administrativo_fecharModal('pa-modal-notif'); painel_administrativo_toast(msg ? 'Notificação enviada!' : 'Notificação enviada (sem mensagem).'); }
+    function painel_administrativo_exportar() { painel_administrativo_toast('Relatório exportado em CSV!'); }
+    function painel_administrativo_toast(msg, isErr) {
+      const t = document.getElementById('pa-toast');
+      t.textContent = msg; t.style.background = isErr ? '#DC2626' : '#059669';
+      t.style.opacity = '1'; setTimeout(() => { t.style.opacity = '0'; }, 2200);
+    }
+    function painel_administrativo_renderOrcamentos() {
+      const c = document.getElementById('pa-lista-orcamentos');
+      c.innerHTML = pa_orcamentos.map((o,i) => `<div class="pa-list-item" onclick="painel_administrativo_detalheOrc(${i})"><div class="pa-avatar">${o.ini}</div><div class="flex-1 min-w-0"><div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">${o.nome}</span><span class="pa-badge ${o.badge}">${o.status}</span></div><div class="text-xs text-gray-500 truncate">${o.serv} — ${o.carro}</div><div class="text-xs font-semibold" style="color:#2563EB">R$ ${o.valor.toLocaleString('pt-BR')},00</div></div></div>`).join('');
+    }
+    function painel_administrativo_renderPagamentos() {
+      const c = document.getElementById('pa-lista-pagamentos');
+      c.innerHTML = pa_pagamentos.map((p,i) => `<div class="pa-list-item" onclick="painel_administrativo_detalhePag(${i})"><div class="pa-avatar" style="background:${p.status==='Pago'?'#059669':'#D97706'}">R$</div><div class="flex-1 min-w-0"><div class="flex justify-between items-center"><span class="font-semibold text-sm" style="color:#1E3A5F">${p.nome}</span><span class="pa-badge ${p.badge}">${p.status}</span></div><div class="text-xs text-gray-500 truncate">${p.serv}</div><div class="text-xs font-semibold" style="color:${p.status==='Pago'?'#059669':'#D97706'}">R$ ${p.valor.toLocaleString('pt-BR')},00 · ${p.data}</div></div></div>`).join('');
+    }
+  </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
