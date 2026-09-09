@@ -1259,6 +1259,279 @@
   });
 </script>
 
+    <section data-tela="orcamento-e-pagamento" class="hidden">
+      <style>
+        .op-radio-checked { border-color: #2563EB !important; background: rgba(37,99,235,0.05) !important; }
+        .op-toggle-on { background: #2563EB !important; }
+        .op-pix-code { font-family: ui-monospace, monospace; font-size: 0.7rem; word-break: break-all; }
+      </style>
+      <div class="max-w-[430px] mx-auto bg-[#F8FAFC] min-h-screen pb-28">
+
+        <div class="bg-[#1E3A5F] px-5 pt-6 pb-5 rounded-b-3xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-blue-200 text-xs font-medium mb-0.5">Pedido #<span id="op-numero">1047</span></p>
+              <h2 class="text-white text-lg font-bold">Orçamento e Pagamento</h2>
+              <p class="text-blue-300 text-xs mt-0.5">Aguardando sua confirmação</p>
+            </div>
+            <span class="bg-yellow-400 text-[#1E3A5F] text-[10px] font-bold px-2 py-1 rounded-lg">PENDENTE</span>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Veículo e Local</p>
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-[#1E3A5F] flex items-center justify-center text-white text-xl flex-shrink-0">🚗</div>
+            <div class="min-w-0">
+              <p class="font-semibold text-[#1E3A5F] text-sm truncate">BMW X5 M Sport</p>
+              <p class="text-gray-500 text-xs">Placa EZX-7B32</p>
+              <p class="text-gray-400 text-xs">Cond. Jardins Premium · Av. Brigadeiro Faria Lima, 3477</p>
+            </div>
+          </div>
+          <div class="mt-3 flex items-center gap-2 text-xs text-gray-500 bg-[#F8FAFC] rounded-lg p-2">
+            <span>📅</span>
+            <span>Agendado para <strong class="text-[#1E3A5F]">14/01/2026</strong> às <strong class="text-[#1E3A5F]">09:00</strong></span>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <h3 class="text-[#1E3A5F] font-bold text-sm mb-3">Serviços Selecionados</h3>
+          <div id="op-lista-servicos" class="space-y-0"></div>
+        </div>
+
+        <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <div class="flex justify-between items-center text-sm mb-1.5">
+            <span class="text-gray-500">Subtotal</span>
+            <span id="op-subtotal" class="font-medium text-gray-700">R$ 0</span>
+          </div>
+          <div class="flex justify-between items-center text-sm mb-1.5">
+            <span class="text-gray-500">Deslocamento</span>
+            <span class="font-medium text-green-600">Grátis</span>
+          </div>
+          <div class="border-t border-gray-100 my-2"></div>
+          <div class="flex justify-between items-center text-sm mb-1.5">
+            <span class="text-gray-500">Prazo de execução</span>
+            <span class="font-semibold text-[#2563EB]">3 dias úteis</span>
+          </div>
+          <div class="border-t-2 border-dashed border-gray-200 my-2.5"></div>
+          <div class="flex justify-between items-center">
+            <span class="font-bold text-[#1E3A5F]">Total</span>
+            <span id="op-total" class="text-2xl font-bold text-[#1E3A5F]">R$ 0</span>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <h3 class="text-[#1E3A5F] font-bold text-sm mb-3">Forma de Pagamento</h3>
+          <div class="space-y-2">
+            <button onclick="orcamento_e_pagamento_selecionarPagamento('pix')" id="op-btn-pix" class="op-radio-checked w-full flex items-center gap-3 p-3 rounded-xl border-2 border-gray-200 transition-all text-left">
+              <span class="text-2xl">💳</span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm text-gray-800">Pix</p>
+                <p class="text-xs text-gray-400">Aprovação instantânea · 5% desconto</p>
+              </div>
+              <span id="op-check-pix" class="w-5 h-5 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xs flex-shrink-0">✓</span>
+            </button>
+            <button onclick="orcamento_e_pagamento_selecionarPagamento('cartao')" id="op-btn-cartao" class="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-gray-200 transition-all text-left">
+              <span class="text-2xl">🏦</span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm text-gray-800">Cartão de Crédito</p>
+                <p class="text-xs text-gray-400">Até 3x sem juros</p>
+              </div>
+              <span id="op-check-cartao" class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0"></span>
+            </button>
+            <button onclick="orcamento_e_pagamento_selecionarPagamento('boleto')" id="op-btn-boleto" class="w-full flex items-center gap-3 p-3 rounded-xl border-2 border-gray-200 transition-all text-left">
+              <span class="text-2xl">📄</span>
+              <div class="flex-1 min-w-0">
+                <p class="font-semibold text-sm text-gray-800">Boleto Bancário</p>
+                <p class="text-xs text-gray-400">Vencimento em 3 dias úteis</p>
+              </div>
+              <span id="op-check-boleto" class="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0"></span>
+            </button>
+          </div>
+          <div id="op-detalhe-pix" class="mt-3 bg-[#F8FAFC] border border-gray-200 rounded-xl p-3">
+            <p class="text-xs font-semibold text-[#1E3A5F] mb-0.5">Chave Pix (CNPJ)</p>
+            <p class="op-pix-code text-gray-600 mb-1">12.345.678/0001-90</p>
+            <p class="text-[10px] text-gray-400 mb-2">BlueCircuit Soluções Digitais LTDA</p>
+            <button onclick="orcamento_e_pagamento_copiarPix()" class="text-xs bg-[#2563EB] text-white px-3 py-1.5 rounded-lg font-medium active:scale-95 transition-transform">Copiar chave Pix</button>
+            <span id="op-msg-copia" class="text-xs text-green-600 ml-2 hidden">✓ Copiado!</span>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+          <h3 class="text-[#1E3A5F] font-bold text-sm mb-3">Notificações</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="text-green-600 text-lg">💬</span>
+                <div>
+                  <p class="text-sm font-medium text-gray-800">WhatsApp</p>
+                  <p class="text-[10px] text-gray-400">(11) 95653-5142</p>
+                </div>
+              </div>
+              <button onclick="orcamento_e_pagamento_toggleNotificacao('whatsapp')" id="op-toggle-whatsapp" class="op-toggle-on w-11 h-6 rounded-full relative transition-colors flex-shrink-0">
+                <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all"></span>
+              </button>
+            </div>
+            <div class="border-t border-gray-50"></div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <span class="text-[#2563EB] text-lg">🔔</span>
+                <div>
+                  <p class="text-sm font-medium text-gray-800">Push Notification</p>
+                  <p class="text-[10px] text-gray-400">Alertas no app</p>
+                </div>
+              </div>
+              <button onclick="orcamento_e_pagamento_toggleNotificacao('push')" id="op-toggle-push" class="op-toggle-on w-11 h-6 rounded-full relative transition-colors flex-shrink-0">
+                <span class="absolute right-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow transition-all"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mx-4 mt-4 flex items-start gap-2.5">
+          <button onclick="orcamento_e_pagamento_toggleTermos()" id="op-check-termos" class="mt-0.5 w-5 h-5 rounded border-2 border-gray-300 flex items-center justify-center transition-colors flex-shrink-0 bg-white"></button>
+          <p class="text-xs text-gray-500 leading-relaxed">Li e aceito os <span class="text-[#2563EB] font-medium">Termos de Serviço</span> e a <span class="text-[#2563EB] font-medium">Política de Privacidade</span>. Autorizo a execução dos serviços descritos acima em meu veículo.</p>
+        </div>
+
+        <div class="mx-4 mt-4 space-y-2.5">
+          <button onclick="orcamento_e_pagamento_confirmarPedido()" id="op-btn-confirmar" class="w-full bg-gray-300 text-white font-bold py-3.5 rounded-2xl text-sm active:scale-[0.98] transition-all disabled:opacity-50" disabled>Confirmar e Pagar</button>
+          <button onclick="mostrarTela('agendar-atendimento')" class="w-full bg-white text-[#1E3A5F] font-semibold py-3 rounded-2xl text-sm border border-gray-200 active:scale-[0.98] transition-transform">← Revisar Agendamento</button>
+        </div>
+      </div>
+
+      <script>
+        var orcamento_e_pagamento_pagamento = 'pix';
+        var orcamento_e_pagamento_notifWhatsapp = true;
+        var orcamento_e_pagamento_notifPush = true;
+        var orcamento_e_pagamento_termos = false;
+        var orcamento_e_pagamento_pedidoConfirmado = false;
+
+        var orcamento_e_pagamento_servicos = [
+          { nome: 'PPF Premium — Capô + Portas + Para-lamas', preco: 4850 },
+          { nome: 'Película Insulfilm Premium 75%', preco: 890 },
+          { nome: 'Proteção de Para-brisa e Vidros', preco: 650 }
+        ];
+
+        function orcamento_e_pagamento_renderizarServicos() {
+          var el = document.getElementById('op-lista-servicos');
+          var html = '';
+          orcamento_e_pagamento_servicos.forEach(function(s) {
+            html += '<div class="flex items-center justify-between py-2.5 border-b border-gray-50 last:border-0">' +
+              '<div class="flex items-center gap-2 min-w-0"><span class="text-green-600 text-xs flex-shrink-0">✓</span><span class="text-sm text-gray-700 truncate">' + s.nome + '</span></div>' +
+              '<span class="text-sm font-semibold text-[#1E3A5F] ml-2 flex-shrink-0">R$ ' + s.preco.toLocaleString('pt-BR') + '</span></div>';
+          });
+          el.innerHTML = html;
+          var total = orcamento_e_pagamento_servicos.reduce(function(a, b) { return a + b.preco; }, 0);
+          document.getElementById('op-subtotal').textContent = 'R$ ' + total.toLocaleString('pt-BR');
+          document.getElementById('op-total').textContent = 'R$ ' + total.toLocaleString('pt-BR');
+        }
+
+        function orcamento_e_pagamento_selecionarPagamento(metodo) {
+          orcamento_e_pagamento_pagamento = metodo;
+          ['pix', 'cartao', 'boleto'].forEach(function(m) {
+            var btn = document.getElementById('op-btn-' + m);
+            var check = document.getElementById('op-check-' + m);
+            if (m === metodo) {
+              btn.classList.add('op-radio-checked');
+              btn.classList.remove('border-gray-200');
+              check.className = 'w-5 h-5 rounded-full bg-[#2563EB] flex items-center justify-center text-white text-xs flex-shrink-0';
+              check.innerHTML = '✓';
+            } else {
+              btn.classList.remove('op-radio-checked');
+              btn.classList.add('border-gray-200');
+              check.className = 'w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0';
+              check.innerHTML = '';
+            }
+          });
+          document.getElementById('op-detalhe-pix').classList.toggle('hidden', metodo !== 'pix');
+        }
+
+        function orcamento_e_pagamento_toggleNotificacao(tipo) {
+          if (tipo === 'whatsapp') {
+            orcamento_e_pagamento_notifWhatsapp = !orcamento_e_pagamento_notifWhatsapp;
+            orcamento_e_pagamento_aplicarToggle('op-toggle-whatsapp', orcamento_e_pagamento_notifWhatsapp);
+          } else {
+            orcamento_e_pagamento_notifPush = !orcamento_e_pagamento_notifPush;
+            orcamento_e_pagamento_aplicarToggle('op-toggle-push', orcamento_e_pagamento_notifPush);
+          }
+        }
+
+        function orcamento_e_pagamento_aplicarToggle(id, ligado) {
+          var btn = document.getElementById(id);
+          var span = btn.querySelector('span');
+          if (ligado) {
+            btn.classList.add('op-toggle-on');
+            btn.classList.remove('bg-gray-300');
+            span.style.right = '0.125rem'; span.style.left = 'auto';
+          } else {
+            btn.classList.remove('op-toggle-on');
+            btn.classList.add('bg-gray-300');
+            span.style.left = '0.125rem'; span.style.right = 'auto';
+          }
+        }
+
+        function orcamento_e_pagamento_toggleTermos() {
+          orcamento_e_pagamento_termos = !orcamento_e_pagamento_termos;
+          var chk = document.getElementById('op-check-termos');
+          if (orcamento_e_pagamento_termos) {
+            chk.classList.add('bg-[#2563EB]', 'border-[#2563EB]');
+            chk.innerHTML = '<span class="text-white text-[10px] font-bold">✓</span>';
+          } else {
+            chk.classList.remove('bg-[#2563EB]', 'border-[#2563EB]');
+            chk.innerHTML = '';
+          }
+          orcamento_e_pagamento_atualizarBotao();
+        }
+
+        function orcamento_e_pagamento_atualizarBotao() {
+          var btn = document.getElementById('op-btn-confirmar');
+          if (orcamento_e_pagamento_termos && !orcamento_e_pagamento_pedidoConfirmado) {
+            btn.disabled = false;
+            btn.classList.remove('bg-gray-300');
+            btn.classList.add('bg-[#2563EB]');
+            btn.textContent = 'Confirmar e Pagar';
+          } else if (orcamento_e_pagamento_pedidoConfirmado) {
+            btn.textContent = '✓ Pedido #1047 Confirmado!';
+            btn.classList.remove('bg-[#2563EB]', 'bg-gray-300');
+            btn.classList.add('bg-green-600');
+            btn.disabled = true;
+          } else {
+            btn.disabled = true;
+            btn.classList.remove('bg-[#2563EB]', 'bg-green-600');
+            btn.classList.add('bg-gray-300');
+            btn.textContent = 'Confirmar e Pagar';
+          }
+        }
+
+        function orcamento_e_pagamento_confirmarPedido() {
+          if (!orcamento_e_pagamento_termos) return;
+          orcamento_e_pagamento_pedidoConfirmado = true;
+          orcamento_e_pagamento_atualizarBotao();
+          var metodo = orcamento_e_pagamento_pagamento === 'pix' ? 'Pix' : orcamento_e_pagamento_pagamento === 'cartao' ? 'Cartão de Crédito' : 'Boleto';
+          var canais = [];
+          if (orcamento_e_pagamento_notifWhatsapp) canais.push('WhatsApp');
+          if (orcamento_e_pagamento_notifPush) canais.push('Push Notification');
+          var notifStr = canais.length > 0 ? ' Confirmação enviada por ' + canais.join(' e ') + '.' : '';
+          var msg = document.createElement('div');
+          msg.className = 'mx-4 mt-3 bg-green-50 border border-green-200 rounded-2xl p-3 text-center';
+          msg.innerHTML = '<p class="text-green-700 text-sm font-medium">Pagamento via ' + metodo + ' iniciado com sucesso.</p>' +
+            '<p class="text-green-600 text-xs mt-1">' + notifStr + '</p>';
+          var btnContainer = document.getElementById('op-btn-confirmar').parentElement;
+          btnContainer.insertAdjacentElement('beforeend', msg);
+        }
+
+        function orcamento_e_pagamento_copiarPix() {
+          navigator.clipboard.writeText('12.345.678/0001-90');
+          var msg = document.getElementById('op-msg-copia');
+          msg.classList.remove('hidden');
+          setTimeout(function() { msg.classList.add('hidden'); }, 2500);
+        }
+
+        orcamento_e_pagamento_renderizarServicos();
+        orcamento_e_pagamento_atualizarBotao();
+      </script>
+    </section>
+
     <!-- TELAS -->
     </main>
 
