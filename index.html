@@ -773,6 +773,492 @@
   </script>
 </section>
 
+    <section data-tela="agendar-atendimento" class="hidden">
+  <div class="max-w-[430px] mx-auto min-h-screen bg-slate-50 pb-6">
+    <!-- Header da tela -->
+    <div class="bg-[#1E3A5F] px-4 pt-12 pb-5">
+      <button onclick="mostrarTela('escolher-servico')" class="text-white/80 hover:text-white mb-3 flex items-center gap-1 text-sm" aria-label="Voltar">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Voltar
+      </button>
+      <h1 class="text-[#F8FAFC] text-xl font-bold">Agendar Atendimento</h1>
+      <p class="text-blue-200 text-sm mt-1">Preencha os dados para solicitar seu agendamento</p>
+    </div>
+
+    <!-- Indicador de etapas -->
+    <div class="bg-white px-4 py-3 shadow-sm flex items-center gap-2" id="etapas-indicador">
+      <div class="ag-etapa flex items-center gap-1 text-xs font-semibold text-[#2563EB]" data-etapa="1">
+        <span class="w-5 h-5 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[10px]">1</span> Dados
+      </div>
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="ag-etapa flex items-center gap-1 text-xs font-semibold text-gray-400" data-etapa="2">
+        <span class="w-5 h-5 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-[10px]">2</span> Veículo
+      </div>
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="ag-etapa flex items-center gap-1 text-xs font-semibold text-gray-400" data-etapa="3">
+        <span class="w-5 h-5 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-[10px]">3</span> Agendamento
+      </div>
+      <div class="flex-1 h-px bg-gray-200"></div>
+      <div class="ag-etapa flex items-center gap-1 text-xs font-semibold text-gray-400" data-etapa="4">
+        <span class="w-5 h-5 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-[10px]">4</span> Fotos
+      </div>
+    </div>
+
+    <form id="form-agendamento" class="px-4 mt-4 space-y-4" onsubmit="return false">
+
+      <!-- ETAPA 1: Dados do Cliente -->
+      <div id="etapa-1" class="ag-etapa-conteudo space-y-3">
+        <h2 class="text-[#1E3A5F] font-bold text-base flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          Seus Dados
+        </h2>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Nome completo *</label>
+          <input type="text" id="cliente-nome" placeholder="Ex: Ricardo Mendes" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white" required>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">WhatsApp *</label>
+          <input type="tel" id="cliente-whatsapp" placeholder="(11) 96565-3514" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white" required>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">E-mail</label>
+          <input type="email" id="cliente-email" placeholder="ricardo@email.com" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Condomínio *</label>
+          <select id="cliente-condominio" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white" required>
+            <option value="">Selecione o condomínio</option>
+            <option value="residencial-panorama">Residencial Panorama — Morumbi</option>
+            <option value="edificio-aurora">Edifício Aurora — Jardins</option>
+            <option value="cond-villa-napoli">Condomínio Villa Napoli — Itaim</option>
+            <option value="torre-imperial">Torre Imperial — Brooklin</option>
+            <option value="residencial-costa-nobre">Residencial Costa Nobre — Moema</option>
+            <option value="edificio-piazza">Edifício Piazza di Spagna — Campo Belo</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Bloco / Apto</label>
+          <input type="text" id="cliente-bloco" placeholder="Ex: Bloco A, Apto 1201" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white">
+        </div>
+      </div>
+
+      <!-- ETAPA 2: Dados do Veículo -->
+      <div id="etapa-2" class="ag-etapa-conteudo hidden space-y-3">
+        <h2 class="text-[#1E3A5F] font-bold text-base flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h8m-8 5h8m-4-9v14m-5-4h10"/></svg>
+          Dados do Veículo
+        </h2>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Marca *</label>
+          <select id="veiculo-marca" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white" required>
+            <option value="">Selecione</option>
+            <option value="porsche">Porsche</option>
+            <option value="bmw">BMW</option>
+            <option value="mercedes">Mercedes-Benz</option>
+            <option value="audi">Audi</option>
+            <option value="range-rover">Range Rover</option>
+            <option value="tesla">Tesla</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Modelo *</label>
+          <input type="text" id="veiculo-modelo" placeholder="Ex: Porsche 911 Carrera" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white" required>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Cor</label>
+            <input type="text" id="veiculo-cor" placeholder="Ex: Preto Onix" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Placa</label>
+            <input type="text" id="veiculo-placa" placeholder="ABC-1D23" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Tipo de aplicação *</label>
+          <div class="grid grid-cols-2 gap-2" id="tipos-aplicacao">
+            <button type="button" class="ag-tipo-btn px-3 py-3 rounded-lg border-2 border-gray-200 text-center bg-white" onclick="agendar_atendimento_selecionarTipo(this, 'ppf')">
+              <span class="text-lg">🛡️</span>
+              <span class="block text-xs font-semibold text-[#1E3A5F] mt-1">PPF Premium</span>
+              <span class="block text-[10px] text-gray-500">Proteção total</span>
+            </button>
+            <button type="button" class="ag-tipo-btn px-3 py-3 rounded-lg border-2 border-gray-200 text-center bg-white" onclick="agendar_atendimento_selecionarTipo(this, 'insufilme')">
+              <span class="text-lg">🪟</span>
+              <span class="block text-xs font-semibold text-[#1E3A5F] mt-1">Insufilme</span>
+              <span class="block text-[10px] text-gray-500">Vidros & janelas</span>
+            </button>
+            <button type="button" class="ag-tipo-btn px-3 py-3 rounded-lg border-2 border-gray-200 text-center bg-white" onclick="agendar_atendimento_selecionarTipo(this, 'pelicula-premium')">
+              <span class="text-lg">✨</span>
+              <span class="block text-xs font-semibold text-[#1E3A5F] mt-1">Película Premium</span>
+              <span class="block text-[10px] text-gray-500">Conforto térmico</span>
+            </button>
+            <button type="button" class="ag-tipo-btn px-3 py-3 rounded-lg border-2 border-gray-200 text-center bg-white" onclick="agendar_atendimento_selecionarTipo(this, 'ceramica')">
+              <span class="text-lg">💎</span>
+              <span class="block text-xs font-semibold text-[#1E3A5F] mt-1">Vitrificação</span>
+              <span class="block text-[10px] text-gray-500">Proteção cerâmica</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ETAPA 3: Agendamento -->
+      <div id="etapa-3" class="ag-etapa-conteudo hidden space-y-3">
+        <h2 class="text-[#1E3A5F] font-bold text-base flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Data & Horário
+        </h2>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-2">Data disponível *</label>
+          <div class="grid grid-cols-4 gap-2" id="datas-disponiveis">
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '20/01')">
+              <span class="block text-[10px] text-gray-500">Seg</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">20</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '21/01')">
+              <span class="block text-[10px] text-gray-500">Ter</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">21</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '22/01')">
+              <span class="block text-[10px] text-gray-500">Qua</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">22</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '23/01')">
+              <span class="block text-[10px] text-gray-500">Qui</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">23</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '24/01')">
+              <span class="block text-[10px] text-gray-500">Sex</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">24</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '25/01')">
+              <span class="block text-[10px] text-gray-500">Sáb</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">25</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '26/01')">
+              <span class="block text-[10px] text-gray-500">Dom</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">26</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+            <button type="button" class="ag-data-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center" onclick="agendar_atendimento_selecionarData(this, '27/01')">
+              <span class="block text-[10px] text-gray-500">Seg</span>
+              <span class="block text-sm font-bold text-[#1E3A5F]">27</span>
+              <span class="block text-[10px] text-gray-500">Jan</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-2">Horário preferido *</label>
+          <div class="grid grid-cols-3 gap-2" id="horarios-disponiveis">
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '08:00')">08:00</button>
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '09:30')">09:30</button>
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '11:00')">11:00</button>
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '13:30')">13:30</button>
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '15:00')">15:00</button>
+            <button type="button" class="ag-horario-btn px-2 py-2.5 rounded-lg border border-gray-200 bg-white text-center text-sm font-medium text-[#1E3A5F]" onclick="agendar_atendimento_selecionarHorario(this, '16:30')">16:30</button>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Observações</label>
+          <textarea id="agendamento-obs" rows="2" placeholder="Informações adicionais sobre o veículo ou acesso..." class="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:border-[#2563EB] focus:ring-1 focus:ring-[#2563EB] outline-none bg-white resize-none"></textarea>
+        </div>
+      </div>
+
+      <!-- ETAPA 4: Fotos & Confirmação -->
+      <div id="etapa-4" class="ag-etapa-conteudo hidden space-y-4">
+        <h2 class="text-[#1E3A5F] font-bold text-base flex items-center gap-2">
+          <svg class="w-4 h-4 text-[#2563EB]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Fotos do Veículo
+        </h2>
+        <p class="text-xs text-gray-500 -mt-2">Envie fotos das áreas que receberão a aplicação</p>
+        <div class="grid grid-cols-3 gap-2" id="fotos-preview">
+          <button type="button" class="aspect-square rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center gap-1 bg-white hover:border-[#2563EB] hover:bg-blue-50 transition-colors" onclick="agendar_atendimento_adicionarFoto(this)">
+            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span class="text-[10px] text-gray-400">Adicionar</span>
+          </button>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-[#1E3A5F] mb-1">Solicitar orçamento junto?</label>
+          <label class="flex items-center gap-2 cursor-pointer bg-white p-3 rounded-lg border border-gray-200">
+            <input type="checkbox" id="solicitar-orcamento" class="w-4 h-4 accent-[#2563EB] rounded">
+            <span class="text-sm text-[#1E3A5F]">Sim, quero receber o orçamento estimado</span>
+          </label>
+        </div>
+
+        <!-- Resumo do agendamento -->
+        <div class="bg-[#1E3A5F] rounded-xl p-4 text-white space-y-2">
+          <h3 class="font-bold text-sm">Resumo do Agendamento</h3>
+          <div class="space-y-1 text-xs text-blue-200">
+            <p>Cliente: <span id="resumo-nome" class="text-white font-medium">—</span></p>
+            <p>WhatsApp: <span id="resumo-whatsapp" class="text-white font-medium">—</span></p>
+            <p>Condomínio: <span id="resumo-condominio" class="text-white font-medium">—</span></p>
+            <p>Veículo: <span id="resumo-veiculo" class="text-white font-medium">—</span></p>
+            <p>Tipo: <span id="resumo-tipo" class="text-white font-medium">—</span></p>
+            <p>Data: <span id="resumo-data" class="text-white font-medium">—</span></p>
+            <p>Horário: <span id="resumo-horario" class="text-white font-medium">—</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de navegação -->
+      <div class="flex gap-3 pt-2 pb-4">
+        <button type="button" id="btn-voltar-etapa" onclick="agendar_atendimento_voltarEtapa()" class="hidden flex-1 py-3 rounded-xl border-2 border-[#1E3A5F] text-[#1E3A5F] font-bold text-sm hover:bg-[#1E3A5F] hover:text-white transition-colors">
+          Voltar
+        </button>
+        <button type="button" id="btn-proxima-etapa" onclick="agendar_atendimento_proximaEtapa()" class="flex-1 py-3 rounded-xl bg-[#2563EB] text-white font-bold text-sm hover:bg-blue-600 transition-colors shadow-lg shadow-blue-200">
+          Continuar
+        </button>
+        <button type="button" id="btn-confirmar-agendamento" onclick="agendar_atendimento_confirmar()" class="hidden flex-1 py-3 rounded-xl bg-green-600 text-white font-bold text-sm hover:bg-green-700 transition-colors shadow-lg shadow-green-200">
+          Confirmar Agendamento
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<script>
+  let agendar_etapa_atual = 1;
+  let agendar_tipo_selecionado = null;
+  let agendar_data_selecionada = null;
+  let agendar_horario_selecionado = null;
+
+  function agendar_atendimento_proximaEtapa() {
+    if (!agendar_atendimento_validarEtapa(agendar_etapa_atual)) return;
+    if (agendar_etapa_atual < 4) {
+      agendar_etapa_atual++;
+      agendar_atendimento_atualizarUI();
+      if (agendar_etapa_atual === 4) {
+        agendar_atendimento_atualizarResumo();
+      }
+    }
+  }
+
+  function agendar_atendimento_voltarEtapa() {
+    if (agendar_etapa_atual > 1) {
+      agendar_etapa_atual--;
+      agendar_atendimento_atualizarUI();
+    }
+  }
+
+  function agendar_atendimento_atualizarUI() {
+    document.querySelectorAll('.ag-etapa-conteudo').forEach(el => el.classList.add('hidden'));
+    document.getElementById('etapa-' + agendar_etapa_atual).classList.remove('hidden');
+
+    document.querySelectorAll('.ag-etapa').forEach(el => {
+      const num = parseInt(el.dataset.etapa);
+      const span = el.querySelector('span');
+      if (num <= agendar_etapa_atual) {
+        el.classList.remove('text-gray-400');
+        el.classList.add('text-[#2563EB]');
+        span.classList.remove('bg-gray-200', 'text-gray-500');
+        span.classList.add('bg-[#2563EB]', 'text-white');
+      } else {
+        el.classList.add('text-gray-400');
+        el.classList.remove('text-[#2563EB]');
+        span.classList.add('bg-gray-200', 'text-gray-500');
+        span.classList.remove('bg-[#2563EB]', 'text-white');
+      }
+    });
+
+    const btnVoltar = document.getElementById('btn-voltar-etapa');
+    const btnProximo = document.getElementById('btn-proxima-etapa');
+    const btnConfirmar = document.getElementById('btn-confirmar-agendamento');
+
+    if (agendar_etapa_atual === 1) {
+      btnVoltar.classList.add('hidden');
+      btnVoltar.classList.remove('flex');
+      btnProximo.classList.remove('hidden');
+      btnProximo.classList.add('flex');
+      btnConfirmar.classList.add('hidden');
+      btnConfirmar.classList.remove('flex');
+      btnProximo.textContent = 'Continuar';
+    } else if (agendar_etapa_atual === 4) {
+      btnVoltar.classList.remove('hidden');
+      btnVoltar.classList.add('flex');
+      btnProximo.classList.add('hidden');
+      btnProximo.classList.remove('flex');
+      btnConfirmar.classList.remove('hidden');
+      btnConfirmar.classList.add('flex');
+    } else {
+      btnVoltar.classList.remove('hidden');
+      btnVoltar.classList.add('flex');
+      btnProximo.classList.remove('hidden');
+      btnProximo.classList.add('flex');
+      btnConfirmar.classList.add('hidden');
+      btnConfirmar.classList.remove('flex');
+      btnProximo.textContent = 'Continuar';
+    }
+  }
+
+  function agendar_atendimento_validarEtapa(etapa) {
+    if (etapa === 1) {
+      const nome = document.getElementById('cliente-nome').value.trim();
+      const whatsapp = document.getElementById('cliente-whatsapp').value.trim();
+      const condominio = document.getElementById('cliente-condominio').value;
+      if (!nome || !whatsapp || !condominio) {
+        agendar_atendimento_mostrarErro('Preencha nome, WhatsApp e condomínio');
+        return false;
+      }
+    } else if (etapa === 2) {
+      const marca = document.getElementById('veiculo-marca').value;
+      const modelo = document.getElementById('veiculo-modelo').value.trim();
+      if (!marca || !modelo) {
+        agendar_atendimento_mostrarErro('Selecione a marca e informe o modelo');
+        return false;
+      }
+      if (!agendar_tipo_selecionado) {
+        agendar_atendimento_mostrarErro('Selecione o tipo de aplicação');
+        return false;
+      }
+    } else if (etapa === 3) {
+      if (!agendar_data_selecionada) {
+        agendar_atendimento_mostrarErro('Selecione uma data');
+        return false;
+      }
+      if (!agendar_horario_selecionado) {
+        agendar_atendimento_mostrarErro('Selecione um horário');
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function agendar_atendimento_mostrarErro(msg) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-red-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-xl max-w-[380px] text-center';
+    toast.textContent = msg;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity 0.3s'; }, 2500);
+    setTimeout(() => toast.remove(), 2800);
+  }
+
+  function agendar_atendimento_selecionarTipo(botao, tipo) {
+    document.querySelectorAll('.ag-tipo-btn').forEach(b => {
+      b.classList.remove('border-[#2563EB]', 'bg-blue-50');
+      b.classList.add('border-gray-200');
+    });
+    botao.classList.remove('border-gray-200');
+    botao.classList.add('border-[#2563EB]', 'bg-blue-50');
+    agendar_tipo_selecionado = tipo;
+  }
+
+  function agendar_atendimento_selecionarData(botao, data) {
+    document.querySelectorAll('.ag-data-btn').forEach(b => {
+      b.classList.remove('border-[#2563EB]', 'bg-blue-50', 'text-[#2563EB]');
+      b.classList.add('border-gray-200', 'text-[#1E3A5F]');
+    });
+    botao.classList.remove('border-gray-200', 'text-[#1E3A5F]');
+    botao.classList.add('border-[#2563EB]', 'bg-blue-50', 'text-[#2563EB]');
+    agendar_data_selecionada = data;
+  }
+
+  function agendar_atendimento_selecionarHorario(botao, horario) {
+    document.querySelectorAll('.ag-horario-btn').forEach(b => {
+      b.classList.remove('border-[#2563EB]', 'bg-blue-50', 'text-white');
+      b.classList.add('border-gray-200', 'text-[#1E3A5F]');
+    });
+    botao.classList.remove('border-gray-200', 'text-[#1E3A5F]');
+    botao.classList.add('border-[#2563EB]', 'bg-blue-50', 'text-white');
+    agendar_horario_selecionado = horario;
+  }
+
+  function agendar_atendimento_adicionarFoto(container) {
+    const nomesFotos = ['frontal.jpg', 'lateral-dir.jpg', 'traseira.jpg', 'capo.jpg', 'teto.jpg'];
+    const col = container.parentElement;
+    const idx = col.querySelectorAll('button').length;
+    if (idx > 5) return;
+
+    const novo = document.createElement('div');
+    novo.className = 'aspect-square rounded-lg bg-gray-100 flex items-center justify-center relative overflow-hidden';
+    novo.innerHTML = `
+      <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+      <span class="absolute bottom-1 left-0 right-0 text-center text-[10px] text-gray-500 bg-white/80 py-0.5">${nomesFotos[Math.min(idx - 1, nomesFotos.length - 1)] || 'foto' + idx + '.jpg'}</span>
+    `;
+    col.insertBefore(novo, container);
+    if (col.querySelectorAll('button').length >= 6) {
+      container.style.display = 'none';
+    }
+  }
+
+  function agendar_atendimento_atualizarResumo() {
+    const nomeSel = document.getElementById('cliente-nome').value.trim() || '—';
+    const whatsappSel = document.getElementById('cliente-whatsapp').value.trim() || '—';
+    const condominioSel = document.getElementById('cliente-condominio');
+    const condominioTxt = condominioSel.options[condominioSel.selectedIndex]?.text || '—';
+    const marcaSel = document.getElementById('veiculo-marca');
+    const marcaTxt = marcaSel.options[marcaSel.selectedIndex]?.text || '—';
+    const modeloSel = document.getElementById('veiculo-modelo').value.trim() || '—';
+
+    document.getElementById('resumo-nome').textContent = nomeSel;
+    document.getElementById('resumo-whatsapp').textContent = whatsappSel;
+    document.getElementById('resumo-condominio').textContent = condominioTxt;
+    document.getElementById('resumo-veiculo').textContent = marcaTxt + ' ' + modeloSel;
+
+    const tipoMap = { ppf: 'PPF Premium', insufilme: 'Insufilme', pelicula-premium: 'Película Premium', ceramica: 'Vitrificação' };
+    document.getElementById('resumo-tipo').textContent = tipoMap[agendar_tipo_selecionado] || '—';
+    document.getElementById('resumo-data').textContent = agendar_data_selecionada || '—';
+    document.getElementById('resumo-horario').textContent = agendar_horario_selecionado || '—';
+  }
+
+  function agendar_atendimento_confirmar() {
+    const nome = document.getElementById('cliente-nome').value.trim();
+    const whatsapp = document.getElementById('cliente-whatsapp').value.trim();
+    const condominio = document.getElementById('cliente-condominio');
+    const condominioTxt = condominio.options[condominio.selectedIndex]?.text || '';
+    const marca = document.getElementById('veiculo-marca');
+    const marcaTxt = marca.options[marca.selectedIndex]?.text || '';
+    const modelo = document.getElementById('veiculo-modelo').value.trim();
+    const tipoMap = { ppf: 'PPF Premium', insufilme: 'Insufilme', pelicula-premium: 'Película Premium', ceramica: 'Vitrificação' };
+    const tipoTxt = tipoMap[agendar_tipo_selecionado] || '';
+
+    const toast = document.createElement('div');
+    toast.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+    toast.innerHTML = `
+      <div class="bg-white rounded-2xl p-6 mx-4 max-w-sm w-full text-center shadow-2xl">
+        <div class="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-3">
+          <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        </div>
+        <h3 class="text-lg font-bold text-[#1E3A5F]">Agendamento Confirmado!</h3>
+        <p class="text-sm text-gray-500 mt-2">Olá, <strong>${nome}</strong>!</p>
+        <p class="text-xs text-gray-400 mt-1">${tipoTxt} • ${marcaTxt} ${modelo}</p>
+        <p class="text-xs text-gray-400">${condominioTxt}</p>
+        <p class="text-sm font-semibold text-[#2563EB] mt-2">${agendar_data_selecionada} às ${agendar_horario_selecionado}</p>
+        <p class="text-xs text-gray-400 mt-1">Confirmação enviada via WhatsApp</p>
+        <button onclick="this.closest('.fixed').remove(); mostrarTela('inicio-premium');" class="mt-4 w-full py-3 rounded-xl bg-[#2563EB] text-white font-bold text-sm">Voltar ao Início</button>
+      </div>
+    `;
+    document.body.appendChild(toast);
+
+    const solicitaOrcamento = document.getElementById('solicitar-orcamento').checked;
+    if (solicitaOrcamento) {
+      setTimeout(() => {
+        mostrarTela('orcamento-e-pagamento');
+        toast.remove();
+      }, 4000);
+    }
+  }
+
+  // Mascara de WhatsApp
+  document.getElementById('cliente-whatsapp').addEventListener('input', function(e) {
+    let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 7) v = '(' + v.slice(0, 2) + ') ' + v.slice(2, 7) + '-' + v.slice(7);
+    else if (v.length > 2) v = '(' + v.slice(0, 2) + ') ' + v.slice(2);
+    e.target.value = v;
+  });
+
+  // Atualiza resumo quando campos mudam
+  ['cliente-nome', 'cliente-whatsapp', 'cliente-condominio', 'veiculo-marca', 'veiculo-modelo'].forEach(id => {
+    document.getElementById(id).addEventListener('change', () => {
+      if (agendar_etapa_atual === 4) agendar_atendimento_atualizarResumo();
+    });
+  });
+</script>
+
     <!-- TELAS -->
     </main>
 
