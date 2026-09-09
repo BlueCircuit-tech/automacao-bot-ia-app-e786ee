@@ -139,6 +139,348 @@
 <body>
   <div class="app-shell">
     <main>
+    <section data-tela="inicio-premium" class="hidden">
+  <style>
+    [data-tela="inicio-premium"]{font-family:"Trebuchet MS",sans-serif;color:#1E3A5F}
+    .ip-title{font-family:Georgia,serif;letter-spacing:-.025em}
+    .ip-card{border:1px solid #dbe7f5;background:#fff;border-radius:20px;box-shadow:0 8px 24px rgba(30,58,95,.07)}
+    .ip-press{transition:transform .18s ease,box-shadow .18s ease}
+    .ip-press:active{transform:scale(.98)}
+    .ip-pill{border:1px solid #cbdcf3;background:#eff6ff;color:#1E3A5F}
+  </style>
+
+  <div class="mx-auto w-full max-w-[430px] overflow-hidden bg-[#F8FAFC] pb-28">
+    <div class="px-4 pt-4">
+      <div class="relative min-h-[270px] overflow-hidden rounded-[28px] bg-[#1E3A5F] shadow-xl">
+        <img
+          src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=85"
+          alt="Veículo esportivo premium protegido com película automotiva"
+          class="absolute inset-0 h-full w-full object-cover opacity-55"
+        >
+        <div class="absolute inset-0 bg-gradient-to-t from-[#102944] via-[#1E3A5F]/55 to-transparent"></div>
+
+        <div class="relative flex min-h-[270px] flex-col justify-end p-5 text-white">
+          <span class="mb-3 w-fit rounded-full border border-white/30 bg-[#1E3A5F]/70 px-3 py-1 text-[11px] font-bold uppercase tracking-[.18em]">
+            Proteção premium
+          </span>
+          <h1 class="ip-title max-w-[290px] text-[31px] font-bold leading-[1.05]">
+            Seu veículo impecável por mais tempo.
+          </h1>
+          <p class="mt-3 max-w-[310px] text-sm leading-5 text-blue-50">
+            Películas de alta performance, proteção PPF e atendimento especializado em condomínios.
+          </p>
+          <button
+            type="button"
+            onclick="mostrarTela('escolher-servico')"
+            class="ip-press mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-[#2563EB] px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-950/25"
+          >
+            Solicitar orçamento
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-4 pt-5">
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          onclick="mostrarTela('agendar-atendimento')"
+          class="ip-card ip-press flex min-h-[92px] items-start gap-3 p-4 text-left"
+        >
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xl" aria-hidden="true">◷</span>
+          <span>
+            <span class="block text-sm font-bold text-[#1E3A5F]">Agendar visita</span>
+            <span class="mt-1 block text-xs leading-4 text-slate-500">Condomínio ou estúdio</span>
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onclick="inicio_premium_abrirRastreio()"
+          class="ip-card ip-press flex min-h-[92px] items-start gap-3 p-4 text-left"
+        >
+          <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-xl" aria-hidden="true">⌖</span>
+          <span>
+            <span class="block text-sm font-bold text-[#1E3A5F]">Meu pedido</span>
+            <span class="mt-1 block text-xs leading-4 text-slate-500">Acompanhe o serviço</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div id="inicio_premium_rastreio" class="hidden px-4 pt-4">
+      <form onsubmit="inicio_premium_buscarPedido(event)" class="ip-card p-4">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h2 class="ip-title text-lg font-bold">Acompanhar pedido</h2>
+            <p class="mt-1 text-xs text-slate-500">Use o código enviado por WhatsApp.</p>
+          </div>
+          <button
+            type="button"
+            onclick="inicio_premium_fecharRastreio()"
+            class="ip-press rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-[#1E3A5F]"
+            aria-label="Fechar acompanhamento"
+          >
+            Fechar
+          </button>
+        </div>
+
+        <div class="mt-4 flex gap-2">
+          <label class="min-w-0 flex-1">
+            <span class="sr-only">Código do pedido</span>
+            <input
+              id="inicio_premium_codigo"
+              type="text"
+              value="PPF-2847"
+              autocomplete="off"
+              placeholder="Ex.: PPF-2847"
+              class="h-12 w-full rounded-xl border border-slate-200 bg-[#F8FAFC] px-3 text-sm font-bold uppercase outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-blue-100"
+            >
+          </label>
+          <button
+            type="submit"
+            class="ip-press rounded-xl bg-[#1E3A5F] px-4 text-sm font-bold text-white"
+          >
+            Buscar
+          </button>
+        </div>
+
+        <div id="inicio_premium_resultado" class="mt-3 hidden rounded-2xl bg-blue-50 p-4" aria-live="polite"></div>
+      </form>
+    </div>
+
+    <div class="px-4 pt-7">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <span class="text-[11px] font-bold uppercase tracking-[.16em] text-[#2563EB]">Especialidades</span>
+          <h2 class="ip-title mt-1 text-2xl font-bold text-[#1E3A5F]">Proteção sob medida</h2>
+        </div>
+        <button
+          type="button"
+          onclick="mostrarTela('escolher-servico')"
+          class="ip-press shrink-0 rounded-lg px-1 py-2 text-xs font-bold text-[#2563EB]"
+        >
+          Ver todos
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-3">
+        <button
+          type="button"
+          onclick="inicio_premium_escolherServico('PPF Frontal Premium')"
+          class="ip-card ip-press flex w-full items-center gap-4 p-3 text-left"
+        >
+          <span class="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-2xl bg-[#1E3A5F] text-3xl text-white" aria-hidden="true">◆</span>
+          <span class="min-w-0 flex-1">
+            <span class="flex items-center gap-2">
+              <span class="block text-[15px] font-bold">PPF Frontal Premium</span>
+              <span class="ip-pill rounded-full px-2 py-0.5 text-[9px] font-bold uppercase">Mais escolhido</span>
+            </span>
+            <span class="mt-1 block text-xs leading-4 text-slate-500">Capô, para-choque, retrovisores e faróis.</span>
+            <span class="mt-2 block text-xs font-bold text-[#2563EB]">A partir de R$ 4.890</span>
+          </span>
+          <span class="text-xl text-[#2563EB]" aria-hidden="true">›</span>
+        </button>
+
+        <button
+          type="button"
+          onclick="inicio_premium_escolherServico('Película de Alta Performance')"
+          class="ip-card ip-press flex w-full items-center gap-4 p-3 text-left"
+        >
+          <span class="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-3xl text-[#2563EB]" aria-hidden="true">◩</span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-[15px] font-bold">Película de alta performance</span>
+            <span class="mt-1 block text-xs leading-4 text-slate-500">Conforto térmico e proteção UV sem cerâmica.</span>
+            <span class="mt-2 block text-xs font-bold text-[#2563EB]">A partir de R$ 1.490</span>
+          </span>
+          <span class="text-xl text-[#2563EB]" aria-hidden="true">›</span>
+        </button>
+
+        <button
+          type="button"
+          onclick="inicio_premium_escolherServico('Atendimento em Condomínio')"
+          class="ip-card ip-press flex w-full items-center gap-4 p-3 text-left"
+        >
+          <span class="flex h-[76px] w-[76px] shrink-0 items-center justify-center rounded-2xl bg-slate-100 text-3xl text-[#1E3A5F]" aria-hidden="true">⌂</span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-[15px] font-bold">Atendimento em condomínio</span>
+            <span class="mt-1 block text-xs leading-4 text-slate-500">Estrutura móvel para grupos de veículos premium.</span>
+            <span class="mt-2 block text-xs font-bold text-[#2563EB]">Condição para 3 ou mais carros</span>
+          </span>
+          <span class="text-xl text-[#2563EB]" aria-hidden="true">›</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="px-4 pt-7">
+      <button
+        type="button"
+        onclick="inicio_premium_verAgenda()"
+        class="ip-press w-full overflow-hidden rounded-[24px] bg-[#1E3A5F] p-5 text-left text-white shadow-lg"
+      >
+        <span class="flex items-start justify-between gap-4">
+          <span>
+            <span class="block text-[11px] font-bold uppercase tracking-[.16em] text-blue-200">Próxima disponibilidade</span>
+            <span class="ip-title mt-2 block text-xl font-bold">Sábado, 24 de maio</span>
+            <span class="mt-1 block text-sm text-blue-100">Alphaville • Barueri, SP</span>
+          </span>
+          <span class="rounded-2xl bg-white/10 px-3 py-2 text-center">
+            <span class="block text-xl font-bold">3</span>
+            <span class="block text-[9px] uppercase tracking-wider text-blue-100">vagas</span>
+          </span>
+        </span>
+        <span class="mt-4 block border-t border-white/15 pt-3 text-sm font-bold text-white">
+          Consultar horários disponíveis →
+        </span>
+      </button>
+    </div>
+
+    <div class="px-4 pt-7">
+      <div class="ip-card p-5">
+        <div class="flex items-start gap-3">
+          <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-blue-50 text-xl" aria-hidden="true">✦</span>
+          <div class="min-w-0 flex-1">
+            <h2 class="ip-title text-lg font-bold">Atendimento inteligente</h2>
+            <p class="mt-1 text-xs leading-5 text-slate-500">
+              Tire dúvidas sobre PPF, películas e compatibilidade com seu veículo.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onclick="mostrarTela('suporte-inteligente')"
+          class="ip-press mt-4 w-full rounded-xl border border-[#2563EB] bg-white px-4 py-3 text-sm font-bold text-[#2563EB]"
+        >
+          Conversar com o assistente
+        </button>
+      </div>
+    </div>
+
+    <div class="px-4 pt-4">
+      <div class="rounded-[20px] border border-blue-100 bg-blue-50 p-4">
+        <div class="flex items-center justify-between gap-4">
+          <button
+            type="button"
+            onclick="inicio_premium_alternarNotificacoes()"
+            class="ip-press min-w-0 flex-1 text-left"
+          >
+            <span class="block text-sm font-bold text-[#1E3A5F]">Lembretes por WhatsApp e push</span>
+            <span id="inicio_premium_notificacao_texto" class="mt-1 block text-xs text-slate-500">
+              Toque para ativar avisos de agenda e pedido.
+            </span>
+          </button>
+          <button
+            id="inicio_premium_notificacao_botao"
+            type="button"
+            onclick="inicio_premium_alternarNotificacoes()"
+            class="ip-press relative h-7 w-12 shrink-0 rounded-full bg-slate-300 transition-colors"
+            aria-label="Ativar notificações"
+            aria-pressed="false"
+          >
+            <span id="inicio_premium_notificacao_bola" class="absolute left-1 top-1 h-5 w-5 rounded-full bg-white shadow transition-transform"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="inicio_premium_toast" class="pointer-events-none fixed bottom-24 left-1/2 z-50 hidden w-[calc(100%-32px)] max-w-[398px] -translate-x-1/2 rounded-2xl bg-[#102944] px-4 py-3 text-center text-sm font-bold text-white shadow-2xl" aria-live="polite"></div>
+  </div>
+
+  <script>
+    var inicio_premium_notificacoesAtivas = false;
+    var inicio_premium_toastTimer;
+
+    function inicio_premium_escolherServico(servico) {
+      sessionStorage.setItem('servicoPremiumSelecionado', servico);
+      inicio_premium_mostrarToast(servico + ' selecionado');
+      setTimeout(function () {
+        mostrarTela('escolher-servico');
+      }, 450);
+    }
+
+    function inicio_premium_abrirRastreio() {
+      var painel = document.getElementById('inicio_premium_rastreio');
+      painel.classList.remove('hidden');
+      setTimeout(function () {
+        painel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('inicio_premium_codigo').focus();
+      }, 80);
+    }
+
+    function inicio_premium_fecharRastreio() {
+      document.getElementById('inicio_premium_rastreio').classList.add('hidden');
+      document.getElementById('inicio_premium_resultado').classList.add('hidden');
+    }
+
+    function inicio_premium_buscarPedido(event) {
+      event.preventDefault();
+      var campo = document.getElementById('inicio_premium_codigo');
+      var resultado = document.getElementById('inicio_premium_resultado');
+      var codigo = campo.value.trim().toUpperCase();
+
+      if (!codigo) {
+        resultado.classList.remove('hidden');
+        resultado.innerHTML = '<p class="text-sm font-bold text-[#1E3A5F]">Digite o código recebido no WhatsApp.</p>';
+        campo.focus();
+        return;
+      }
+
+      campo.value = codigo;
+      resultado.classList.remove('hidden');
+      resultado.innerHTML =
+        '<div class="flex items-center justify-between gap-3">' +
+          '<div><p class="text-xs font-bold uppercase tracking-wider text-[#2563EB]">Pedido ' + inicio_premium_escape(codigo) + '</p>' +
+          '<p class="mt-1 text-sm font-bold text-[#1E3A5F]">PPF frontal em preparação</p></div>' +
+          '<span class="rounded-full bg-white px-3 py-1 text-[10px] font-bold text-[#2563EB]">Confirmado</span>' +
+        '</div>' +
+        '<p class="mt-3 border-t border-blue-100 pt-3 text-xs leading-5 text-slate-600">Instalação: 24/05/2025, às 09h30<br>Edifício Gênesis II, Alphaville</p>' +
+        '<button type="button" onclick="mostrarTela(\'orcamento-e-pagamento\')" class="ip-press mt-3 w-full rounded-xl bg-[#2563EB] px-3 py-2.5 text-xs font-bold text-white">Ver pedido e pagamento</button>';
+    }
+
+    function inicio_premium_alternarNotificacoes() {
+      inicio_premium_notificacoesAtivas = !inicio_premium_notificacoesAtivas;
+      var botao = document.getElementById('inicio_premium_notificacao_botao');
+      var bola = document.getElementById('inicio_premium_notificacao_bola');
+      var texto = document.getElementById('inicio_premium_notificacao_texto');
+
+      botao.setAttribute('aria-pressed', String(inicio_premium_notificacoesAtivas));
+      botao.setAttribute('aria-label', inicio_premium_notificacoesAtivas ? 'Desativar notificações' : 'Ativar notificações');
+      botao.classList.toggle('bg-[#2563EB]', inicio_premium_notificacoesAtivas);
+      botao.classList.toggle('bg-slate-300', !inicio_premium_notificacoesAtivas);
+      bola.classList.toggle('translate-x-5', inicio_premium_notificacoesAtivas);
+      texto.textContent = inicio_premium_notificacoesAtivas
+        ? 'Ativado: você receberá confirmações e atualizações.'
+        : 'Toque para ativar avisos de agenda e pedido.';
+
+      inicio_premium_mostrarToast(
+        inicio_premium_notificacoesAtivas ? 'Notificações ativadas com sucesso' : 'Notificações desativadas'
+      );
+    }
+
+    function inicio_premium_verAgenda() {
+      sessionStorage.setItem('localPremiumSelecionado', 'Alphaville - Barueri, SP');
+      mostrarTela('agendar-atendimento');
+    }
+
+    function inicio_premium_mostrarToast(mensagem) {
+      var toast = document.getElementById('inicio_premium_toast');
+      clearTimeout(inicio_premium_toastTimer);
+      toast.textContent = mensagem;
+      toast.classList.remove('hidden');
+      inicio_premium_toastTimer = setTimeout(function () {
+        toast.classList.add('hidden');
+      }, 2200);
+    }
+
+    function inicio_premium_escape(valor) {
+      var elemento = document.createElement('div');
+      elemento.textContent = valor;
+      return elemento.innerHTML;
+    }
+  </script>
+</section>
+
     <!-- TELAS -->
     </main>
 
